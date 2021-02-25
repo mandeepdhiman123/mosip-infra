@@ -24,11 +24,13 @@ spec:
         component: service-hazelcast-server
         exportLogs: {{ .Values.exportLogs }}
     spec:
+      {{- include "podSecurityContext" .  | indent 6}}
       {{- include "dockerHubSecret" .  | indent 6}}
       containers:
       - name: {{ .Values.services.manual.serviceName }} 
         image: {{ .Values.services.manual.dockerImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
+        {{- include "containerSecurityContext" .  | indent 8}}
         {{ $resources := .Values.services.manual.podconfig.resources }}
         {{- include "resourcesDefinition" (dict "res" $resources) | indent 8 }}
         env:

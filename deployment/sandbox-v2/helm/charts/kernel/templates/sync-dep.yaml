@@ -25,11 +25,13 @@ spec:
         component: {{ .Values.component }} 
         exportLogs: {{ .Values.exportLogs }}
     spec:
+      {{- include "podSecurityContext" .  | indent 6}}
       {{- include "dockerHubSecret" .  | indent 6}}
       containers:
       - name: {{ .Values.services.sync.serviceName }} 
         image: {{ .Values.services.sync.dockerImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
+        {{- include "containerSecurityContext" .  | indent 8}}
         {{ $resources := .Values.services.sync.podconfig.resources }}
         {{- include "resourcesDefinition" (dict "res" $resources) | indent 8 }}
         env:

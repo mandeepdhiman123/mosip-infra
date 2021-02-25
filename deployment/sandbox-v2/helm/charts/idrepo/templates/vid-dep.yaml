@@ -25,11 +25,13 @@ spec:
         component: {{ .Values.component }} 
         exportLogs: {{ .Values.exportLogs }}
     spec:
+      {{- include "podSecurityContext" .  | indent 6}}
       {{- include "dockerHubSecret" .  | indent 6}}
       containers:
       - name: {{ .Values.services.vid.serviceName }} 
         image: {{ .Values.services.vid.dockerImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
+        {{- include "containerSecurityContext" .  | indent 8}}
         {{ $resources := .Values.services.vid.podconfig.resources }}
         {{- include "resourcesDefinition" (dict "res" $resources) | indent 8 }}
         env:

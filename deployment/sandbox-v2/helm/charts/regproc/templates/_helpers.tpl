@@ -30,3 +30,34 @@ resources:
   {{- end }}
 {{- end }}
 {{- end }}
+
+{{/* Template for pod security context */}}
+{{- define "podSecurityContext" }}
+{{ if .Values.securityContext }}
+pod:
+  securityContext:
+    annotations:
+      seccomp.security.alpha.kubernetes.io/pod: runtime/default
+    runAsNonRoot: true
+{{ end }}
+{{- end }}
+
+{{/* Template for container security context */}}
+{{- define "containerSecurityContext" }}
+{{ if .Values.securityContext }}
+container:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
+  	  add: ["SYS_TIME"]
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    privileged: false
+    runAsUser: 1001
+    runAsGroup: 1001
+{{ end }}
+{{- end }}

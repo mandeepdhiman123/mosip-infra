@@ -24,10 +24,12 @@ spec:
         app: {{ .Values.services.booking.serviceName }} 
         component: {{ .Values.component }} 
     spec:
+      {{- include "podSecurityContext" .  | indent 6}}
       containers:
       - name: {{ .Values.services.booking.serviceName }} 
         image: {{ .Values.services.booking.dockerImage }}
         imagePullPolicy: {{ .Values.imagePullPolicy }}
+        {{- include "containerSecurityContext" .  | indent 8}}
         env:
         - name: active_profile_env
           value: {{ .Values.activeProfileEnv }} 
